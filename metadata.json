@@ -1,0 +1,6 @@
+{
+  "name": "点子图互动课件",
+  "description": "小学二年级数学乘法点子图互动课件，包含10×10点子图与纸张平移遮挡探索。",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
