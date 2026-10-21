@@ -120,3 +120,60 @@ export function playClickSound(): void {
     // Graceful fallback
   }
 }
+
+/**
+ * Play cheerful greeting chime (C5 -> E5 -> G5)
+ */
+export function playChimeSound(): void {
+  if (isMuted) return;
+  try {
+    const ctx = getAudioContext();
+    if (!ctx) return;
+
+    const notes = [523.25, 659.25, 783.99]; // C5, E5, G5
+    const now = ctx.currentTime;
+
+    notes.forEach((freq, idx) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(freq, now + idx * 0.12);
+
+      gain.gain.setValueAtTime(0.001, now + idx * 0.12);
+      gain.gain.linearRampToValueAtTime(0.09, now + idx * 0.12 + 0.03);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.12 + 0.28);
+
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+
+      osc.start(now + idx * 0.12);
+      osc.stop(now + idx * 0.12 + 0.3);
+    });
+  } catch {
+    // Graceful fallback
+  }
+}
+
+/**
+ * Speak Chinese text using browser Web Speech API
+ */
+export function speakChineseText(text: string): void {
+  if (typeof window === 'undefined') return;
+
+  // Always play friendly greeting chime
+  playChimeSound();
+
+  if ('speechSynthesis' in window && !isMuted) {
+    try {
+      window.speechSynthesis.cancel();
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = 'zh-CN';
+      utterance.pitch = 1.15; // Cheerful friendly tone for elementary students
+      utterance.rate = 0.95; // Clear natural pace
+      window.speechSynthesis.speak(utterance);
+    } catch {
+      // Graceful fallback
+    }
+  }
+}
