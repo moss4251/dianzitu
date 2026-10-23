@@ -4,7 +4,7 @@
  */
 
 import React, { useState, useRef } from 'react';
-import { Volume2, VolumeX, RotateCcw, Hash, Eye, ChevronDown, Sparkles, ArrowRight, Check, MessageCircle, SquareDashed, Dices } from 'lucide-react';
+import { Volume2, VolumeX, RotateCcw, Hash, Eye, ChevronDown, Sparkles, ArrowRight, Check, MessageCircle, SquareDashed, Dices, Printer } from 'lucide-react';
 import {
   playLiftSound,
   playSnapSound,
@@ -13,9 +13,10 @@ import {
   toggleMute,
 } from './components/AudioEffects';
 import StudentCharacters from './components/StudentCharacters';
+import PrintWorksheet from './components/PrintWorksheet';
 
 export default function App() {
-  const [page, setPage] = useState<1 | 2 | 3>(1);
+  const [page, setPage] = useState<1 | 2 | 3 | 'print'>(1);
   const [muted, setMuted] = useState<boolean>(false);
   const [showNumbers, setShowNumbers] = useState<boolean>(false);
 
@@ -97,11 +98,11 @@ export default function App() {
   };
 
   // Switch pages
-  const handlePageChange = (newPage: 1 | 2 | 3) => {
+  const handlePageChange = (newPage: 1 | 2 | 3 | 'print') => {
     if (page === newPage) return;
     playClickSound();
     setPage(newPage);
-    if (newPage === 1) {
+    if (newPage === 1 || newPage === 'print') {
       setViewMode('none');
       setShowObservationMenu(false);
       setShowInfoMenu(false);
@@ -573,9 +574,9 @@ export default function App() {
   const isRandomEquationButtonAvailable = hasUnlockedPage3;
 
   return (
-    <div className="min-h-screen bg-[#F4F5F7] flex flex-col items-center justify-between p-3 sm:p-6 select-none touch-none font-sans relative">
+    <div className={`min-h-screen bg-[#F4F5F7] print:bg-white flex flex-col items-center justify-between p-3 sm:p-6 print:p-0 ${page === 'print' ? '' : 'select-none touch-none'} font-sans relative`}>
       {/* Top Action Bar */}
-      <div className="w-full max-w-4xl flex items-center justify-between gap-2 sm:gap-4 mb-3">
+      <div className="no-print w-full max-w-4xl flex items-center justify-between gap-2 sm:gap-4 mb-3">
         <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
           {/* Button: 第一页 */}
           <button
@@ -615,18 +616,33 @@ export default function App() {
             </button>
           )}
 
-          {/* Toggle Numbers Button (Pushed to the right of "第二页" / "第三页") */}
+          {/* Button: 打印页 */}
           <button
-            onClick={handleToggleNumbers}
-            className={`flex items-center gap-1.5 px-4 sm:px-5 py-2.5 sm:py-3 rounded-2xl text-base sm:text-lg font-bold cursor-pointer transition-all active:scale-95 shadow-sm border ${
-              showNumbers
-                ? 'bg-amber-100 text-amber-900 border-amber-300 ring-2 ring-amber-300/60'
-                : 'bg-white text-neutral-700 hover:bg-neutral-100 border-neutral-200'
+            onClick={() => handlePageChange('print')}
+            className={`flex items-center gap-1.5 px-4 sm:px-6 py-2.5 sm:py-3 rounded-2xl text-base sm:text-xl font-bold cursor-pointer transition-all active:scale-95 shadow-sm ${
+              page === 'print'
+                ? 'bg-amber-400 text-amber-950 ring-3 ring-amber-300 shadow-md scale-105'
+                : 'bg-white text-neutral-700 hover:bg-neutral-50 border border-neutral-200'
             }`}
           >
-            <Hash className="w-4 h-4 sm:w-5 sm:h-5 text-neutral-600" />
-            <span>数字</span>
+            <Printer className="w-4 h-4 sm:w-5 sm:h-5 text-amber-600" />
+            <span>打印页</span>
           </button>
+
+          {/* Toggle Numbers Button */}
+          {page !== 'print' && (
+            <button
+              onClick={handleToggleNumbers}
+              className={`flex items-center gap-1.5 px-4 sm:px-5 py-2.5 sm:py-3 rounded-2xl text-base sm:text-lg font-bold cursor-pointer transition-all active:scale-95 shadow-sm border ${
+                showNumbers
+                  ? 'bg-amber-100 text-amber-900 border-amber-300 ring-2 ring-amber-300/60'
+                  : 'bg-white text-neutral-700 hover:bg-neutral-100 border-neutral-200'
+              }`}
+            >
+              <Hash className="w-4 h-4 sm:w-5 sm:h-5 text-neutral-600" />
+              <span>数字</span>
+            </button>
+          )}
 
           {/* Reset Button (on Page 2 / 3) */}
           {(page === 2 || page === 3) && (
@@ -705,8 +721,8 @@ export default function App() {
             {isRandomEquationMode && targetEquation
               ? `“${targetEquation.a}行${targetEquation.b}列” 或 “${targetEquation.b}行${targetEquation.a}列”`
               : viewMode === 'col'
-              ? `每列${currentRowCount}个，共${currentColCount}列`
-              : `每行${currentColCount}个，共${currentRowCount}行`}
+              ? `每列${currentRowCount}个，共${currentColCount}列（${currentRowCount}行${currentColCount}列）`
+              : `每行${currentColCount}个，共${currentRowCount}行（${currentRowCount}行${currentColCount}列）`}
           </span>
         </div>
       )}
@@ -899,8 +915,12 @@ export default function App() {
         </div>
       )}
 
-      {/* Main Interactive Stage for Page 1, Page 2, and Page 3 */}
-      {page === 3 ? (
+      {/* Main Interactive Stage for Page 1, Page 2, Page 3, and Print Page */}
+      {page === 'print' ? (
+        <div className="w-full max-w-4xl flex-1 flex flex-col items-center justify-start pb-8">
+          <PrintWorksheet />
+        </div>
+      ) : page === 3 ? (
         /* PAGE 3: Two permanently visible dot boards with stretchable framing box effect & masked target text boxes */
         <div className="relative flex-1 flex flex-col items-center justify-center w-full max-w-4xl pb-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start justify-center w-full">
@@ -1302,7 +1322,7 @@ export default function App() {
 
       {/* Bottom-Right "NEXT（10）" Button / Countdown Tracker (Page 2) */}
       {page === 2 && !isRandomEquationMode && (
-        <div className="fixed bottom-4 sm:bottom-6 right-4 sm:right-6 z-40">
+        <div className="no-print fixed bottom-4 sm:bottom-6 right-4 sm:right-6 z-40">
           <button
             onClick={handleRandomQuestion}
             disabled={isAutoAnimating}
