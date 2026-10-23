@@ -574,7 +574,7 @@ export default function App() {
   const isRandomEquationButtonAvailable = hasUnlockedPage3;
 
   return (
-    <div className={`min-h-screen bg-[#F4F5F7] print:bg-white flex flex-col items-center justify-between p-3 sm:p-6 print:p-0 ${page === 'print' ? '' : 'select-none touch-none'} font-sans relative`}>
+    <div className={`min-h-screen bg-[#F4F5F7] print:bg-white print:min-h-0 print:h-auto print:block flex flex-col items-center justify-between p-3 sm:p-6 print:p-0 ${page === 'print' ? '' : 'select-none touch-none'} font-sans relative`}>
       {/* Top Action Bar */}
       <div className="no-print w-full max-w-4xl flex items-center justify-between gap-2 sm:gap-4 mb-3">
         <div className="flex items-center gap-2 sm:gap-3 flex-wrap">

@@ -117,6 +117,9 @@ export default function PrintWorksheet() {
         </div>
 
         <div className="flex items-center gap-2">
+          <span className="hidden md:inline-flex items-center px-3 py-1.5 rounded-xl bg-amber-50 text-amber-950 border border-amber-300 text-xs font-bold">
+            📄 标准 A4 纸张 (210mm × 297mm)
+          </span>
           <button
             onClick={handleRefreshQuestions}
             className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-bold bg-white text-neutral-800 hover:bg-neutral-50 border border-neutral-300 shadow-xs cursor-pointer transition-all active:scale-95"
@@ -138,16 +141,16 @@ export default function PrintWorksheet() {
       <div className="w-full flex flex-col items-center gap-8 print:gap-0">
         {/* PAGE 1 (Front: 点子图 -> 算式与表达方法) */}
         {(printOption === 'both' || printOption === 'front') && (
-          <div className="print-sheet w-full max-w-[794px] min-h-[1080px] bg-white border border-neutral-300 shadow-xl p-8 sm:p-12 text-black font-sans box-border flex flex-col justify-between">
+          <div className="print-sheet w-full max-w-[794px] min-h-[1050px] bg-white border border-neutral-300 shadow-xl p-6 sm:p-8 text-black font-sans box-border flex flex-col justify-between">
             {/* Sheet Header */}
             <div>
               <div className="text-center pb-2 border-b-2 border-black">
                 <h1 className="text-2xl sm:text-3xl font-black tracking-widest">小学二年级数学·乘法点子图练习纸</h1>
-                <p className="text-xs sm:text-sm font-bold text-neutral-600 mt-1">（正面：根据点子图写算式与表达方法）</p>
+                <p className="text-xs sm:text-sm font-bold text-neutral-600 mt-1">（正面：根据点子图写算式与表达方法 · A4标准版）</p>
               </div>
 
               {/* Student Info Fields */}
-              <div className="flex items-center justify-between text-sm sm:text-base font-bold py-3 border-b border-neutral-300 mb-4">
+              <div className="flex items-center justify-between text-sm sm:text-base font-bold py-2.5 border-b border-neutral-300 mb-3">
                 <span>班级：_______________</span>
                 <span>姓名：_______________</span>
                 <span>日期：_______________</span>
@@ -156,17 +159,17 @@ export default function PrintWorksheet() {
             </div>
 
             {/* Questions Grid (4 Questions, 2x2 layout, spacious for Grade 2 students) */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 flex-1 py-2">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5 flex-1 py-1">
               {frontQuestions.map((q) => (
-                <div key={`front-q-${q.id}`} className="border-2 border-neutral-800 rounded-2xl p-4 flex flex-col justify-between bg-white">
-                  <div className="flex items-center justify-between border-b border-neutral-200 pb-2 mb-2">
+                <div key={`front-q-${q.id}`} className="print-question-card border-2 border-neutral-800 rounded-2xl p-3.5 flex flex-col justify-between bg-white">
+                  <div className="flex items-center justify-between border-b border-neutral-200 pb-1.5 mb-1.5">
                     <span className="font-black text-base">第 {q.id} 题</span>
                     <span className="text-xs text-neutral-500 font-semibold">观察圈出的点子</span>
                   </div>
 
                   {/* 10x10 Dot Array with highlighted area */}
-                  <div className="flex justify-center my-2">
-                    <div className="relative w-[170px] h-[170px] bg-[#FFFBEB] border border-neutral-400 rounded-xl grid grid-cols-10 grid-rows-10 p-1">
+                  <div className="flex justify-center my-1.5">
+                    <div className="relative w-[155px] h-[155px] bg-[#FFFBEB] border border-neutral-400 rounded-xl grid grid-cols-10 grid-rows-10 p-1">
                       {Array.from({ length: 10 }).map((_, r) =>
                         Array.from({ length: 10 }).map((_, c) => {
                           const isInSelected = r < q.rows && c < q.cols;
@@ -254,16 +257,16 @@ export default function PrintWorksheet() {
 
         {/* PAGE 2 (Back: 算式 / 表达方法 -> 画/圈点子图) */}
         {(printOption === 'both' || printOption === 'back') && (
-          <div className="print-sheet w-full max-w-[794px] min-h-[1080px] bg-white border border-neutral-300 shadow-xl p-8 sm:p-12 text-black font-sans box-border flex flex-col justify-between">
+          <div className="print-sheet w-full max-w-[794px] min-h-[1050px] bg-white border border-neutral-300 shadow-xl p-6 sm:p-8 text-black font-sans box-border flex flex-col justify-between">
             {/* Sheet Header */}
             <div>
               <div className="text-center pb-2 border-b-2 border-black">
                 <h1 className="text-2xl sm:text-3xl font-black tracking-widest">小学二年级数学·乘法点子图练习纸</h1>
-                <p className="text-xs sm:text-sm font-bold text-neutral-600 mt-1">（反面：根据算式圈出点子图与表达方法）</p>
+                <p className="text-xs sm:text-sm font-bold text-neutral-600 mt-1">（反面：根据算式圈出点子图与表达方法 · A4标准版）</p>
               </div>
 
               {/* Student Info Fields */}
-              <div className="flex items-center justify-between text-sm sm:text-base font-bold py-3 border-b border-neutral-300 mb-4">
+              <div className="flex items-center justify-between text-sm sm:text-base font-bold py-2.5 border-b border-neutral-300 mb-3">
                 <span>班级：_______________</span>
                 <span>姓名：_______________</span>
                 <span>日期：_______________</span>
@@ -272,12 +275,12 @@ export default function PrintWorksheet() {
             </div>
 
             {/* Questions Grid (4 Questions, 2x2 layout) */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 flex-1 py-2">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5 flex-1 py-1">
               {backQuestions.map((q) => {
                 const product = q.rows * q.cols;
                 return (
-                  <div key={`back-q-${q.id}`} className="border-2 border-neutral-800 rounded-2xl p-4 flex flex-col justify-between bg-white">
-                    <div className="flex items-center justify-between border-b border-neutral-200 pb-2 mb-2">
+                  <div key={`back-q-${q.id}`} className="print-question-card border-2 border-neutral-800 rounded-2xl p-3.5 flex flex-col justify-between bg-white">
+                    <div className="flex items-center justify-between border-b border-neutral-200 pb-1.5 mb-1.5">
                       <span className="font-black text-base">第 {q.id} 题</span>
                       <span className="text-sm font-black font-mono bg-neutral-100 px-2.5 py-0.5 rounded-lg border border-neutral-300">
                         {q.rows} × {q.cols} = {product}
@@ -290,8 +293,8 @@ export default function PrintWorksheet() {
                     </div>
 
                     {/* 10x10 Blank Dot Array for Student to circle */}
-                    <div className="flex justify-center my-2">
-                      <div className="w-[170px] h-[170px] bg-white border-2 border-neutral-400 rounded-xl grid grid-cols-10 grid-rows-10 p-1">
+                    <div className="flex justify-center my-1.5">
+                      <div className="w-[155px] h-[155px] bg-white border-2 border-neutral-400 rounded-xl grid grid-cols-10 grid-rows-10 p-1">
                         {Array.from({ length: 10 }).map((_, r) =>
                           Array.from({ length: 10 }).map((_, c) => (
                             <div key={`bdot-${q.id}-${r}-${c}`} className="w-full h-full flex items-center justify-center">
